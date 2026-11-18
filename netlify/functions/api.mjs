@@ -51,7 +51,7 @@ export default async (req) => {
   if (path === '/logout' && m === 'POST') { await st.delete('sess:' + token); return J({ ok: 1 }); }
   if (path === '/me' && m === 'GET') return J({ user: pub(me), board: await st.get('board:' + me.id, { type: 'json' }) });
   if (path === '/board' && m === 'PUT') {
-    if (!body || !Array.isArray(body.tasks) || JSON.stringify(body).length > 4e6) return err('Invalid board');
+    if (!body || !Array.isArray(body.tasks) || JSON.stringify(body).length > 1e6) return err('Invalid board');
     await st.setJSON('board:' + me.id, body); return J({ ok: 1 });
   }
 

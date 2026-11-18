@@ -19,7 +19,6 @@
   </div>
   <div class="row">
     <span class="stat" id="who"></span><a class="mini" id="usersLink" href="users.html" hidden style="text-decoration:none">👥 Users</a><button class="mini" onclick="logout()">⎋ Log out</button>
-    <button class="mini" id="openDone">✅ Completed (all days)</button><button class="mini" id="openRep">🔁 Repeating &amp; Work Days</button>
     <span class="sub">Theme:</span>
     <button class="sw" data-th="white" style="background:#fff" title="Classic White"></button>
     <button class="sw" data-th="dark" style="background:#0f172a" title="Dark"></button>
@@ -31,28 +30,12 @@
   </div>
 </header>
 
-<section class="panel dash" id="dash">
-  <div class="dhead">
-    <div><h2>📊 Dashboard</h2><p class="sub" id="dDigest"></p></div>
-    <div class="row">
-      <label class="sub"><input type="checkbox" id="optRoll"> 🌅 Auto-roll overdue “Now” tasks each morning</label>
-      <button class="mini" id="optNotif">🔕 Reminders off</button>
-      <select id="optLead" class="mini" title="When to remind"><option value="0">at the time</option><option value="5">5 min before</option><option value="10">10 min before</option><option value="30">30 min before</option></select>
-    </div>
-  </div>
-  <div class="qa"><input id="qa" autocomplete="off" placeholder="⚡ Quick add — e.g. Call supplier tomorrow 3pm !now   ·   Pay bills fri !later   ·   Idea !inbox"><button class="btn pri" id="qaGo">＋ Add</button></div>
-  <div class="qprev" id="qprev"></div>
-  <div class="dcols" id="dcols"></div>
-  <p class="sub">Drag any task onto a calendar day, or use 📅 to pick a date (works on phones too). Drop on <b>Today</b> or <b>Inbox</b> to reschedule fast.</p>
-</section>
-
 <main class="panel cal">
   <div class="calbar">
     <button class="btn" id="prev">‹</button>
     <h2 id="monthTitle"></h2>
     <button class="btn" id="next">›</button>
     <button class="btn pri" id="goToday">Today</button>
-    <div class="seg"><button id="vMonth" class="on">Month</button><button id="vWeek">Week</button></div>
   </div>
   <div class="grid head"><span class="red">Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
   <div class="grid" id="days"></div>
@@ -71,12 +54,6 @@
       <button data-v="trash">🗑 Trash <span id="cTrash">0</span></button>
     </div>
     <div id="bBody"></div>
-  </div>
-</div>
-<div id="modal2" class="overlay" hidden>
-  <div class="panel board">
-    <div class="bhead"><h2 id="m2Title"></h2><button class="x" id="m2Close" title="Close (Esc)">×</button></div>
-    <div id="m2Body" style="margin-top:12px"></div>
   </div>
 </div>
 <div id="toast"></div>
