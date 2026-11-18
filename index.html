@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Calendar Task Board (PH)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Fredoka:wght@400..700&family=Quicksand:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="th-white">
+<script src="auth.js"></script>
+<script>if(!localStorage.getItem(TK))location.replace("login.html")</script>
+<header class="panel top">
+  <div>
+    <h1>🗓️ Smart Calendar Task Board</h1>
+    <p class="sub">Philippine calendar · click a date to open its sticky-note board</p>
+  </div>
+  <div class="row">
+    <span class="stat" id="who"></span><a class="mini" id="usersLink" href="users.html" hidden style="text-decoration:none">👥 Users</a><button class="mini" onclick="logout()">⎋ Log out</button>
+    <button class="mini" id="openDone">✅ Completed (all days)</button><button class="mini" id="openRep">🔁 Repeating &amp; Work Days</button>
+    <span class="sub">Theme:</span>
+    <button class="sw" data-th="white" style="background:#fff" title="Classic White"></button>
+    <button class="sw" data-th="dark" style="background:#0f172a" title="Dark"></button>
+    <button class="sw" data-th="pink" style="background:#f9a8d4" title="Pink"></button>
+    <button class="sw" data-th="cepalco" style="background:linear-gradient(#000 50%,#facc15 50%)" title="CEPALCO"></button>
+    <div class="stat"><b id="sActive">0</b>Active</div>
+    <div class="stat ok"><b id="sDone">0</b>Done</div>
+    <div class="stat bad"><b id="sOver">0</b>Overdue</div>
+  </div>
+</header>
+
+<section class="panel dash" id="dash">
+  <div class="dhead">
+    <div><h2>📊 Dashboard</h2><p class="sub" id="dDigest"></p></div>
+    <div class="row">
+      <label class="sub"><input type="checkbox" id="optRoll"> 🌅 Auto-roll overdue “Now” tasks each morning</label>
+      <button class="mini" id="optNotif">🔕 Reminders off</button>
+      <select id="optLead" class="mini" title="When to remind"><option value="0">at the time</option><option value="5">5 min before</option><option value="10">10 min before</option><option value="30">30 min before</option></select>
+    </div>
+  </div>
+  <div class="qa"><input id="qa" autocomplete="off" placeholder="⚡ Quick add — e.g. Call supplier tomorrow 3pm !now   ·   Pay bills fri !later   ·   Idea !inbox"><button class="btn pri" id="qaGo">＋ Add</button></div>
+  <div class="qprev" id="qprev"></div>
+  <div class="dcols" id="dcols"></div>
+  <p class="sub">Drag any task onto a calendar day, or use 📅 to pick a date (works on phones too). Drop on <b>Today</b> or <b>Inbox</b> to reschedule fast.</p>
+</section>
+
+<main class="panel cal">
+  <div class="calbar">
+    <button class="btn" id="prev">‹</button>
+    <h2 id="monthTitle"></h2>
+    <button class="btn" id="next">›</button>
+    <button class="btn pri" id="goToday">Today</button>
+    <div class="seg"><button id="vMonth" class="on">Month</button><button id="vWeek">Week</button></div>
+  </div>
+  <div class="grid head"><span class="red">Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+  <div class="grid" id="days"></div>
+  <p class="sub legend"><i class="dot hol"></i> Holiday (common PH list — confirm with official proclamations) · <i class="dot tdy"></i> Today (Manila time)</p>
+</main>
+
+<div id="modal" class="overlay" hidden>
+  <div class="panel board">
+    <div class="bhead">
+      <div><h2 id="bTitle"></h2><div id="bHol" class="holtag"></div></div>
+      <button class="x" id="bClose" title="Close (Esc)">×</button>
+    </div>
+    <div class="tabs">
+      <button data-v="board" class="on">📋 Board</button>
+      <button data-v="done">✅ Completed <span id="cDone">0</span></button>
+      <button data-v="trash">🗑 Trash <span id="cTrash">0</span></button>
+    </div>
+    <div id="bBody"></div>
+  </div>
+</div>
+<div id="modal2" class="overlay" hidden>
+  <div class="panel board">
+    <div class="bhead"><h2 id="m2Title"></h2><button class="x" id="m2Close" title="Close (Esc)">×</button></div>
+    <div id="m2Body" style="margin-top:12px"></div>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
