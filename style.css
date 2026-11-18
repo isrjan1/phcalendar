@@ -225,50 +225,34 @@ input[type=checkbox]{accent-color:var(--pri);width:auto;padding:0}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 /* ====== Desktop "one-screen" layout: header + dashboard sidebar + calendar all fit the viewport ====== */
-@media(min-width:1000px) and (min-height:560px){
-  html,body{height:100%}
-  body{height:100dvh;min-height:0;padding:10px;display:flex;flex-direction:column;overflow:hidden}
-  .panel{max-width:none;width:100%;margin:0;padding:12px 14px;border-radius:18px}
-  /* compact single-row header */
-  .top{flex:none;display:flex;align-items:center;gap:10px 16px;padding:8px 14px;margin-bottom:10px}
-  .top .brand{flex:none}.brand h1{font-size:1.2rem;white-space:nowrap}.brand .sub{display:none}
-  .stats{flex:none}.stat{min-width:0;display:flex;align-items:center;gap:6px;padding:3px 11px;border-radius:999px;font-size:.62rem}
-  .stat b{display:inline;font-size:1.05rem}
-  .top .tools{flex:1;justify-content:flex-end;padding:0;border:0;gap:6px;min-width:0}
-  .banner{flex:none;max-width:none;margin:0 0 10px;padding:6px 12px}
-  /* two-column workspace */
-  .app{flex:1;min-height:0;display:grid;grid-template-columns:minmax(300px,27%) minmax(0,1fr);gap:10px}
-  .dash,.cal{min-height:0;min-width:0;display:flex;flex-direction:column;overflow:hidden}
-  .dhead{flex:none;margin-bottom:6px;gap:4px;flex-direction:column;align-items:stretch}
-  .dhead h2,.calbar h2{font-size:1.05rem}
-  .dhead .row{margin-top:2px;gap:6px}.dhead .row .sub{font-size:.68rem}
-  .qa{flex:none}.qa input{padding:8px 11px;font-size:.82rem;border-radius:12px}.qa .btn{padding:6px 12px}
-  .qprev{flex:none;min-height:0;margin:4px 0 0}.qprev:empty{display:none}
-  .dash>.sub:last-child{display:none}
-  .dcols{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;margin-top:8px}
-  .dc{flex:1 1 0;min-height:64px;max-height:none;padding:8px 10px;border-radius:14px;gap:5px}
-  .dc:has(>.empty){flex:0 0 auto;min-height:0}
-  .dc .empty{padding:7px;font-size:.68rem}
-  .dc h3{font-size:.8rem}
-  .di{padding:5px 7px}.dm b{font-size:.76rem}
-  /* calendar fills remaining height */
-  .calbar{flex:none;margin-bottom:6px;gap:8px}
-  .calbar h2{font-size:1.25rem}.calbar .btn{padding:5px 12px}.seg button{padding:5px 12px}
-  .grid.head{flex:none}.grid.head span{padding:2px}
-  .grid{gap:5px}
-  #days{flex:1;min-height:0;grid-auto-rows:minmax(0,1fr)}
-  .cell{min-height:0;padding:5px 6px;border-radius:12px;gap:2px}
-  .cell.wk{min-height:0;overflow:auto}
-  .cell .n{flex:none}.cell .dn{min-width:22px;height:22px;font-size:.82rem}
-  .chip{flex:none}
-  .legend{flex:none;margin:6px 0 0;font-size:.68rem}
+@media(min-width:1000px) and (min-height:560px){body.onescreen html,body.onescreen{height:100%}body.onescreen{height:100dvh;min-height:0;padding:10px;display:flex;flex-direction:column;overflow:hidden}body.onescreen .panel{max-width:none;width:100%;margin:0;padding:12px 14px;border-radius:18px}body.onescreen /* compact single-row header */
+  .top{flex:none;display:flex;align-items:center;gap:10px 16px;padding:8px 14px;margin-bottom:10px}body.onescreen .top .brand{flex:none}body.onescreen .brand h1{font-size:1.2rem;white-space:nowrap}body.onescreen .brand .sub{display:none}body.onescreen .stats{flex:none}body.onescreen .stat{min-width:0;display:flex;align-items:center;gap:6px;padding:3px 11px;border-radius:999px;font-size:.62rem}body.onescreen .stat b{display:inline;font-size:1.05rem}body.onescreen .top .tools{flex:1;justify-content:flex-end;padding:0;border:0;gap:6px;min-width:0}body.onescreen .banner{flex:none;max-width:none;margin:0 0 10px;padding:6px 12px}body.onescreen /* two-column workspace */
+  .app{flex:1;min-height:0;display:grid;grid-template-columns:minmax(300px,27%) minmax(0,1fr);gap:10px}body.onescreen .dash,body.onescreen .cal{min-height:0;min-width:0;display:flex;flex-direction:column;overflow:hidden}body.onescreen .dhead{flex:none;margin-bottom:6px;gap:4px;flex-direction:column;align-items:stretch}body.onescreen .dhead h2,body.onescreen .calbar h2{font-size:1.05rem}body.onescreen .dhead .row{margin-top:2px;gap:6px}body.onescreen .dhead .row .sub{font-size:.68rem}body.onescreen .qa{flex:none}body.onescreen .qa input{padding:8px 11px;font-size:.82rem;border-radius:12px}body.onescreen .qa .btn{padding:6px 12px}body.onescreen .qprev{flex:none;min-height:0;margin:4px 0 0}body.onescreen .qprev:empty{display:none}body.onescreen .dash>.sub:last-child{display:none}body.onescreen .dcols{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;margin-top:8px}body.onescreen .dc{flex:1 1 0;min-height:64px;max-height:none;padding:8px 10px;border-radius:14px;gap:5px}body.onescreen .dc:has(>.empty){flex:0 0 auto;min-height:0}body.onescreen .dc .empty{padding:7px;font-size:.68rem}body.onescreen .dc h3{font-size:.8rem}body.onescreen .di{padding:5px 7px}body.onescreen .dm b{font-size:.76rem}body.onescreen /* calendar fills remaining height */
+  .calbar{flex:none;margin-bottom:6px;gap:8px}body.onescreen .calbar h2{font-size:1.25rem}body.onescreen .calbar .btn{padding:5px 12px}body.onescreen .seg button{padding:5px 12px}body.onescreen .grid.head{flex:none}body.onescreen .grid.head span{padding:2px}body.onescreen .grid{gap:5px}body.onescreen #days{flex:1;min-height:0;grid-auto-rows:minmax(0,1fr)}body.onescreen .cell{min-height:0;padding:5px 6px;border-radius:12px;gap:2px}body.onescreen .cell.wk{min-height:0;overflow:auto}body.onescreen .cell .n{flex:none}body.onescreen .cell .dn{min-width:22px;height:22px;font-size:.82rem}body.onescreen .chip{flex:none}body.onescreen .legend{flex:none;margin:6px 0 0;font-size:.68rem}
 }
-@media(min-width:1000px) and (max-width:1199px) and (min-height:560px){
-  .app{grid-template-columns:minmax(280px,32%) minmax(0,1fr)}
-  .top .tools .mini{padding:5px 8px}
+@media(min-width:1000px) and (max-width:1199px) and (min-height:560px){body.onescreen .app{grid-template-columns:minmax(280px,32%) minmax(0,1fr)}body.onescreen .top .tools .mini{padding:5px 8px}
 }
-@media(min-width:1000px) and (min-height:560px){
-  #dDigest{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .pill{margin-left:4px}
+@media(min-width:1000px) and (min-height:560px){body.onescreen #dDigest{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}body.onescreen .pill{margin-left:4px}
 }
-@media(min-width:1360px) and (min-height:560px){.top .tools{flex-wrap:nowrap}}
+@media(min-width:1360px) and (min-height:560px){body.onescreen .top .tools{flex-wrap:nowrap}}
+
+/* ====== Day board: only each column (Now / Next / Later) scrolls, never the whole popup ====== */
+#modal .board{display:flex;flex-direction:column;overflow:hidden;height:min(760px,94vh)}
+#modal .bhead,#modal .tabs{flex:none}
+#modal #bBody{flex:1;min-height:0;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:2px 2px 0}
+#modal .add,#modal .repl,#modal .zones{flex:none}
+#modal .cols{flex:1;min-height:0}
+#modal .col{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+#modal .col h3{flex:none}
+#modal .col .list{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:12px 6px 8px;gap:14px;overscroll-behavior:contain}
+#modal .zones{margin-top:10px;gap:22px}
+#modal .zone{width:56px;height:56px;font-size:.55rem;box-shadow:3px 3px 0 #000}#modal .zone b{font-size:1.1rem}
+@media(max-width:700px){
+  #modal .board{height:93dvh}
+  #modal .cols{flex:none}
+  #modal .col .list{max-height:42dvh}
+}
+
+.dl{display:flex;flex-direction:column;gap:2px;font-size:.62rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.dl input{text-transform:none;letter-spacing:0;font-weight:600}
+.repend{margin:-8px 0 12px 22px}.repend input{padding:5px 8px;margin:0 4px}

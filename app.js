@@ -139,18 +139,19 @@ function renderBoard(){
   document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===view));
   const B=$('#bBody');
   if(view==='board'){
-    const keep=['nTitle','nDesc','nTime','nPri','nRep'].map(id=>{const el=$('#'+id);return el?[id,el.type==='checkbox'?el.checked:el.value]:null}).filter(Boolean);
+    const keep=['nTitle','nDesc','nTime','nPri','nRep','nEnd'].map(id=>{const el=$('#'+id);return el?[id,el.type==='checkbox'?el.checked:el.value]:null}).filter(Boolean);
     B.innerHTML=`<div class="add">
       <input id="nTitle" maxlength="200" placeholder="What needs to be done? (Enter to add)" aria-label="Task title">
       <input id="nDesc" maxlength="500" placeholder="Description (optional)" aria-label="Description">
       <input type="time" id="nTime" title="Time (optional)" aria-label="Time"><select id="nPri" aria-label="Priority"><option value="Now">🔴 Now</option><option value="Next">🟡 Next</option><option value="Later">🟢 Later</option></select>
       <button class="btn pri" id="nAdd">＋ Add</button></div>
       <label class="repl"><input type="checkbox" id="nRep"> 🔁 Repeat on my working days (${S.workDays.map(i=>DN[i]).join(', ')})</label>
+      <label class="repl repend" id="nEndWrap" hidden>⏹ Ends on <input type="date" id="nEnd" min="${openDate}" aria-label="Repeat end date"> <span>(leave empty to repeat forever)</span></label>
       <div class="cols">${['Now','Next','Later'].map(p=>{const l=sortAct(act(openDate).filter(t=>t.priority===p));
         return `<div class="col ${p}" data-p="${p}"><h3>${p} <small>${l.length}</small></h3><div class="list">${l.length?l.map(noteHTML).join(''):'<div class="empty">No sticky notes</div>'}</div></div>`}).join('')}</div>
       <div class="zones"><div class="zone t" data-z="trash"><b>🗑</b>Trash</div><div class="zone c" data-z="done"><b>✔</b>Complete</div></div>`;
     keep.forEach(([id,v])=>{const el=$('#'+id);if(el){if(el.type==='checkbox')el.checked=v;else el.value=v}}); // survive re-renders while typing
-    $('#nAdd').onclick=addTask;$('#nTitle').onkeydown=e=>{if(e.key==='Enter')addTask()};$('#nDesc').onkeydown=e=>{if(e.key==='Enter')addTask()};
+    const syncEnd=()=>{$('#nEndWrap').hidden=!$('#nRep').checked};syncEnd();$('#nRep').onchange=syncEnd;$('#nAdd').onclick=addTask;$('#nTitle').onkeydown=e=>{if(e.key==='Enter')addTask()};$('#nDesc').onkeydown=e=>{if(e.key==='Enter')addTask()};
     wireDrag();
   }else{
     const l=mine(view);
@@ -176,7 +177,8 @@ function addTask(){
   const p=$('#nPri').value,pal=COLORS[p],desc=$('#nDesc').value.trim(),color=pal[S.tasks.length%pal.length];
   if($('#nRep').checked){
     const td=todayStr(),start=openDate<td?td:openDate; // a repeat never back-fills the past
-    S.repeats.push({id:'r'+Date.now(),title,description:desc,time:$('#nTime').value,priority:p,color,active:true,start});
+    const end=$('#nEnd').value||'';if(end&&end<start){toast('End date must be on or after the start date');return $('#nEnd').focus()}
+    S.repeats.push({id:'r'+Date.now(),title,description:desc,time:$('#nTime').value,priority:p,color,active:true,start,end});
     const [y,m]=start.split('-').map(Number);ensureMonth(y,m-1);
     toast(S.workDays.includes(wd(start))?'🔁 Repeating task added to your working days':'🔁 Saved — starts on your next working day');
   }else{
@@ -243,7 +245,7 @@ function ensureMonth(y=vy,m=vm){
   if(key(y,m,1)>addDays(todayStr(),550))return; // don't generate repeats more than ~18 months ahead (keeps the board small)
   S.repeats.filter(r=>r.active).forEach(r=>{for(let d=1;d<=dim;d++){
     const k=key(y,m,d);
-    if(k<r.start||!S.workDays.includes(new Date(y,m,d).getDay())||S.gen[r.id+'|'+k])continue;
+    if(k<r.start||(r.end&&k>r.end)||!S.workDays.includes(new Date(y,m,d).getDay())||S.gen[r.id+'|'+k])continue;
     S.gen[r.id+'|'+k]=1;ch=1;
     S.tasks.push({id:'t'+Date.now()+Math.random().toString(36).slice(2,7),date:k,title:r.title,description:r.description,time:r.time||'',priority:r.priority,status:'active',pinned:false,favorite:false,color:r.color,created:todayStr(),repeatId:r.id});
   }});
@@ -285,10 +287,11 @@ function repHTML(){
   <div class="add rep"><input id="rT" maxlength="200" placeholder="Task title" aria-label="Task title" value="${esc(e?e.title:'')}"><input id="rD" maxlength="500" placeholder="Description (optional)" aria-label="Description" value="${esc(e?e.description:'')}">
   <input type="time" id="rM" title="Time (optional)" aria-label="Time" value="${e?e.time||'':''}">
   <select id="rP" aria-label="Priority">${['Now','Next','Later'].map(p=>`<option${e&&e.priority===p?' selected':''}>${p}</option>`).join('')}</select>
-  <input type="date" id="rS" value="${e?e.start:todayStr()}" ${e?'disabled':''} title="Start date" aria-label="Start date">
+  <label class="dl">Starts <input type="date" id="rS" value="${e?e.start:todayStr()}" ${e?'disabled':''} title="Start date" aria-label="Start date"></label>
+  <label class="dl">Ends <input type="date" id="rE" value="${e&&e.end?e.end:''}" min="${e?e.start:todayStr()}" title="End date (optional — empty repeats forever)" aria-label="End date"></label>
   <button class="btn pri" data-a="rsave">${e?'💾 Save':'＋ Add'}</button>${e?'<button class="btn" data-a="rcancel">Cancel</button>':''}</div>
   <h4 style="margin:14px 0 6px">Your repeating tasks (${S.repeats.length})</h4>
-  ${S.repeats.length?S.repeats.map(r=>`<div class="item"><div><h4>🔁 ${esc(r.title)}</h4><small>${r.description?esc(r.description)+' · ':''}${r.time?fmtT(r.time)+' · ':''}${r.priority} · from ${r.start}${r.active?'':' · ⏸ paused'}</small></div>
+  ${S.repeats.length?S.repeats.map(r=>`<div class="item"><div><h4>🔁 ${esc(r.title)}</h4><small>${r.description?esc(r.description)+' · ':''}${r.time?fmtT(r.time)+' · ':''}${r.priority} · from ${r.start}${r.end?' → until '+r.end:' · no end date'}${r.end&&r.end<todayStr()?' · ✅ ended':''}${r.active?'':' · ⏸ paused'}</small></div>
   <div class="nact"><button data-a="redit" data-id="${r.id}" aria-label="Edit">✏️</button><button data-a="rpause" data-id="${r.id}">${r.active?'⏸ Pause':'▶ Resume'}</button><button data-a="rdel" data-id="${r.id}" aria-label="Delete">🗑</button></div></div>`).join('')
   :'<div class="empty">No repeating tasks yet. You can also tick “Repeat” when adding a task on any date.</div>'}`;
 }
@@ -322,10 +325,12 @@ $('#m2Body').onclick=async e=>{
   if(a==='drestore'||a==='dtrash'){const t=find(b.dataset.id);if(!t)return;t.status=a==='drestore'?'active':'trash';if(a==='drestore')delete t.completed;save();fillDone();renderCal();return toast(a==='drestore'?'Restored to its day':'Moved to Trash')}
   if(a==='rsave'){
     const title=$('#rT').value.trim();if(!title)return toast('Please type a title');
-    const desc=$('#rD').value.trim(),p=$('#rP').value,tm=$('#rM').value;
-    if(editRep){const x=S.repeats.find(q=>q.id===editRep);x.title=title;x.description=desc;x.priority=p;x.time=tm;
+    const desc=$('#rD').value.trim(),p=$('#rP').value,tm=$('#rM').value,end=$('#rE').value||'';
+    const stChk=editRep?S.repeats.find(q=>q.id===editRep).start:($('#rS').value||todayStr());
+    if(end&&end<stChk)return toast('End date must be on or after the start date');
+    if(editRep){const x=S.repeats.find(q=>q.id===editRep);x.title=title;x.description=desc;x.priority=p;x.time=tm;x.end=end;if(end)purge(t=>t.repeatId===x.id&&t.date>end);
       S.tasks.forEach(t=>{if(t.repeatId===x.id&&t.status==='active'&&t.date>=todayStr()){t.title=title;t.description=desc;t.priority=p;t.time=tm}});editRep=null;toast('Updated')}
-    else{const pal=COLORS[p],td=todayStr(),st=$('#rS').value||td;S.repeats.push({id:'r'+Date.now(),title,description:desc,time:tm,priority:p,color:pal[S.repeats.length%pal.length],active:true,start:st<td?td:st});toast('🔁 Repeating task added')}
+    else{const pal=COLORS[p],td=todayStr(),st=$('#rS').value||td;S.repeats.push({id:'r'+Date.now(),title,description:desc,time:tm,priority:p,color:pal[S.repeats.length%pal.length],active:true,start:st<td?td:st,end});toast('🔁 Repeating task added')}
   }
   else if(a==='rcancel')editRep=null;
   else if(a==='redit')editRep=r.id;
